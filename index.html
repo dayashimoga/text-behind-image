@@ -44,22 +44,101 @@
         </div>
     </div></nav>
     <main class="container py-4">
-        <div class="hero-section text-center mb-4"><h1 class="gradient-text">Text Behind Image</h1><p class="text-muted">Create professional text-behind-subject effects</p></div>
-    <div class="glass-card p-4 text-center">
-        <canvas id="effectCanvas" width="800" height="500" style="width:100%;background:#111;border-radius:12px;"></canvas>
-        <div class="d-flex gap-2 justify-content-center mt-3" style="flex-wrap:wrap;">
+        <div class="hero-section text-center mb-4"><h1 class="gradient-text">Text Behind Image</h1><p class="text-muted">Create professional text-behind-subject effects with interactive masking</p></div>
+    <div class="editor-layout">
+        <div class="glass-card editor-canvas-panel">
+            <canvas id="effectCanvas" width="800" height="500" style="width:100%;background:#111;border-radius:12px;cursor:move;"></canvas>
+            <div id="maskStatus" class="text-muted" style="font-size:0.8rem;margin-top:0.5rem;text-align:center;"></div>
+        </div>
+        <div class="glass-card editor-controls">
+            <h3>📷 Image</h3>
             <input type="file" id="imgUpload" accept="image/*" style="display:none;">
-            <button class="btn btn-primary" id="uploadImg">📁 Upload Image</button>
-            <input type="text" id="behindText" class="form-control" style="max-width:200px;" placeholder="Your text..." value="HELLO">
-            <input type="color" id="textColor" value="#ffffff">
-            <input type="range" id="textSize" min="40" max="200" value="100" style="width:120px;">
-            <button class="btn btn-secondary" id="saveFx">⬇️ Save</button>
+            <button class="btn btn-primary w-100" id="uploadImg">📁 Upload Image</button>
+
+            <h3 class="mt-3">✏️ Text</h3>
+            <input type="text" id="behindText" class="form-control w-100" placeholder="Your text..." value="HELLO">
+            <div class="control-row mt-2">
+                <label>Color</label>
+                <input type="color" id="textColor" value="#ffffff">
+            </div>
+            <div class="control-row">
+                <label>Size</label>
+                <input type="range" id="textSize" min="20" max="300" value="100" style="flex:1;">
+            </div>
+            <div class="control-row">
+                <label>Font</label>
+                <select id="fontFamily" class="form-select">
+                    <option value="Impact">Impact</option>
+                    <option value="Arial Black">Arial Black</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+            </div>
+            <div class="control-row">
+                <label>Effect</label>
+                <select id="textEffect" class="form-select">
+                    <option value="solid">Solid Fill</option>
+                    <option value="gradient">Gradient</option>
+                    <option value="outline">Outline</option>
+                    <option value="glow">Glow</option>
+                    <option value="shadow">Drop Shadow</option>
+                </select>
+            </div>
+            <div class="control-row">
+                <label>Rotation</label>
+                <input type="range" id="textRotation" min="-45" max="45" value="0" style="flex:1;">
+            </div>
+
+            <h3 class="mt-3">🎯 Masking</h3>
+            <div class="tool-modes">
+                <label class="tool-radio"><input type="radio" name="toolMode" value="drag" checked> 🖐️ Drag Text</label>
+                <label class="tool-radio"><input type="radio" name="toolMode" value="paint"> 🖌️ Paint Mask</label>
+                <label class="tool-radio"><input type="radio" name="toolMode" value="erase"> 🧹 Erase Mask</label>
+            </div>
+            <button class="btn btn-secondary w-100 mt-2" id="autoDetect">⚡ Auto-Detect Subject</button>
+            <div class="control-row mt-2">
+                <label>Threshold</label>
+                <input type="range" id="threshold" min="50" max="220" value="128" style="flex:1;">
+                <span id="thresholdVal" style="font-size:0.8rem;width:30px;text-align:right;">128</span>
+            </div>
+            <div class="control-row">
+                <label>Brush</label>
+                <input type="range" id="brushSize" min="5" max="80" value="30" style="flex:1;">
+                <span id="brushSizeVal" style="font-size:0.8rem;width:40px;text-align:right;">30px</span>
+            </div>
+            <div class="control-row">
+                <label>Opacity</label>
+                <input type="range" id="maskOpacity" min="0" max="1" step="0.05" value="1" style="flex:1;">
+            </div>
+            <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-sm btn-secondary" id="undoMask" style="flex:1;">↩ Undo</button>
+                <button class="btn btn-sm btn-secondary" id="clearMask" style="flex:1;">🗑️ Clear Mask</button>
+            </div>
+
+            <h3 class="mt-3">💾 Export</h3>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" id="savePNG" style="flex:1;">PNG</button>
+                <button class="btn btn-secondary btn-sm" id="saveJPG" style="flex:1;">JPEG</button>
+            </div>
+            <div class="control-row mt-1">
+                <label>Quality</label>
+                <input type="range" id="jpgQuality" min="50" max="100" value="90" style="flex:1;">
+            </div>
         </div>
     </div>
     </main>
     <footer class="footer"><div class="container copyright text-center py-4">© 2026 QuickUtils. All rights reserved.</div></footer>
     <script src="quickutils-core.js"></script>
     <script src="script.js"></script>
+
+
+
+
+
+
+
 
 
 
@@ -98,6 +177,7 @@
       <a href="https://cron.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Cron Builder</a>
       <a href="https://cyberdefense.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Cyber Defense</a>
       <a href="https://dna.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">DNA Lab</a>
+      <a href="https://dailyfacts.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Dailyfacts</a>
       <a href="https://convert.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Data Converter</a>
       <a href="https://datasets.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Datasets Directory</a>
       <a href="https://decide.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Decision Maker</a>
@@ -161,6 +241,7 @@
       <a href="https://tools.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Tools Directory</a>
       <a href="https://travelbuilder.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Travel Builder</a>
       <a href="https://typing.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Typing Speed Test</a>
+      <a href="https://units.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Unit Converter</a>
       <a href="https://video.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Video Studio</a>
       <a href="https://weather.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Weather Dashboard</a>
       <a href="https://chess.quickutils.top" target="_blank" style="padding: 4px 10px; background: rgba(128,128,128,0.1); border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: inherit; opacity: 0.8; transition: all 0.2s; white-space: nowrap;">Web Chess</a>
@@ -172,6 +253,13 @@
    </div>
 </div>
 <!-- /QuickUtils Network Promo -->
+
+
+
+
+
+
+
 
 
 
